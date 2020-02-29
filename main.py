@@ -44,17 +44,12 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-
     opt = edict()
     opt.q = event.message.text
     opt.max_results = 5
-
     send_text = "Channels:\n" + "\n".join(await youtube_search(opt)) + "\n"
     print(send_text)
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=send_text)
-
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=send_text)
 
 if __name__ == "__main__":
 #    app.run()
