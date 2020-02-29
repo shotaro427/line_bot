@@ -55,7 +55,7 @@ def handle_message(event):
         queryWord = event.message.text.lstrip('検索')
         channels = youtube_search(queryWord, 5)
 
-        if (channels.count != 0):
+        if (channels.count > 0):
             send_text = "Channels:\n" + "\n".join(channels) + "\n"
         else:
             send_text = "帰れ"
