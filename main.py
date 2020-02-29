@@ -12,6 +12,7 @@ from linebot.models import (
 import os
 from easydict import EasyDict as edict
 import youtube
+import asyncio
 
 app = Flask(__name__)
 
@@ -48,9 +49,11 @@ def handle_message(event):
     opt.q = event.message.text
     opt.max_results = 5
 
+    send_text = "Channels:\n" + "\n".join(await youtube_search(opt)) + "\n"
+
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text="Channels:\n" + "\n".join(youtube_search(opt)) + "\n")
+        TextSendMessage(text=send_text)
 
 
 if __name__ == "__main__":
