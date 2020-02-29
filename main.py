@@ -50,7 +50,7 @@ def handle_message(event):
 
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text="Channels:\n", "\n".join(youtube_search()), "\n"))
+        TextSendMessage(text="Channels:\n" + "\n".join(youtube_search()) + "\n")
 
 
 if __name__ == "__main__":
