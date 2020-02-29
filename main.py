@@ -50,12 +50,16 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
-    channels = youtube_search(event.message.text, 5)
+    if (event.message.text.startswith('検索')):
 
-    send_text = "Channels:\n" + "\n".join(channels) + "\n"
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=send_text))
+        queryWord = event.message.text.lstrip('検索')
+        channels = youtube_search(queryWord, 5)
+
+        send_text = "Channels:\n" + "\n".join(channels) + "\n"
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=send_text))
 
 def youtube_search(queryWord, maxResults):
     
