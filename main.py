@@ -9,7 +9,6 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
-from EasyDict import easydict as edict
 import os
 import youtube
 import asyncio
@@ -44,11 +43,8 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    opt = edict()
-    opt.p = event.message.text
-    opt.max_results = 5
 
-    channels = youtube.youtube_search(opt)
+    channels = youtube.youtube_search(event.message.text, 5)
 
     send_text = "Channels:\n" + "\n".join(channels) + "\n"
     line_bot_api.reply_message(
