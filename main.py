@@ -9,11 +9,10 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
+from EasyDict import easydict as edict
 import os
 import youtube
 import asyncio
-
-from easydict import EasyDict as edict
 
 app = Flask(__name__)
 
