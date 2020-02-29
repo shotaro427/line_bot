@@ -37,19 +37,25 @@ def callback():
         # 署名を検証し、問題なければhandleに定義されている関数を呼び出す
         handler.handle(body, signature)
     except InvalidSignatureError:
+        print("Invalid signature")
         abort(400)
 
     return 'OK'
 
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    opt = edict()
-    opt.q = event.message.text
-    opt.max_results = 5
-    send_text = "Channels:\n" + "\n".join(await youtube_search(opt)) + "\n"
-    print(send_text)
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=send_text)
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=event.message.text))
+
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
+#     # opt = edict()
+#     # opt.q = event.message.text
+#     # opt.max_results = 5
+#     # send_text = "Channels:\n" + "\n".join(await youtube_search(opt)) + "\n"
+#     # print(send_text)
+#     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text)
 
 if __name__ == "__main__":
 #    app.run()
