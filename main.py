@@ -74,7 +74,7 @@ def youtube_search(queryWord, maxResults):
     # レスポンスの内容を取得してチャンネルだけを保存
     for search_result in search_response.get("items", []):
         if search_result["id"]["kind"] == "youtube#channel":
-            channels.append("%s (%s)" % (search_result["snippet"]["title"], search_result["id"]["channelId"]))
+            channels.append("%s (%s)" % (search_result["snippet"]["title"], "https://www.youtube.com/channel/UCdn5BQ06XqgXoAxIhbqw5Rg" + search_result["id"]["channelId"]))
 
     return channels
 
