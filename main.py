@@ -12,8 +12,8 @@ from linebot.models import (
 import os
 import asyncio
 
-from apiclient.discovery import build
-from apiclient.errors import HttpError
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 app = Flask(__name__)
 
