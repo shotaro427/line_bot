@@ -10,7 +10,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 import os
-import youtube
+from . import youtube
 import asyncio
 
 app = Flask(__name__)
