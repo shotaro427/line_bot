@@ -10,6 +10,8 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 import os
+from easydict import EasyDict as edict
+import youtube
 
 app = Flask(__name__)
 
@@ -25,12 +27,13 @@ def callback():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
-    # get request body as text
+    # リクエストボディを取得
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
     # handle webhook body
     try:
+        # 署名を検証し、問題なければhandleに定義されている関数を呼び出す
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
@@ -40,9 +43,14 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+
+    opt = edict()
+    opt.q = event.message.text
+    opt.max_results = 5
+
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text="Channels:\n", "\n".join(youtube_search()), "\n"))
 
 
 if __name__ == "__main__":
