@@ -10,14 +10,20 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 import os
-from . import youtube
 import asyncio
+
+from apiclient.discovery import build
+from apiclient.errors import HttpError
 
 app = Flask(__name__)
 
 #環境変数取得
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
+API_KEY = os.environ['YOUTUBE_API_KEY']
+
+API_SERVICE_NAME = "youtube"
+API_VERSION = "v3"
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
@@ -44,12 +50,33 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
-    channels = youtube.youtube_search(event.message.text, 5)
+    channels = youtube_search(event.message.text, 5)
 
     send_text = "Channels:\n" + "\n".join(channels) + "\n"
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=send_text))
+
+def youtube_search(queryWord, maxResults):
+    
+    # youtubeのインスタンスを作成
+    youtube = build(API_SERVICE_NAME, API_VERSION, developerKey=API_KEY)
+
+    # レスポンスの実行
+    search_response = youtube.search().list(
+        q=queryWord,
+        part="id,snippet",
+        maxResults=maxResults
+    ).execute()
+
+    channels = []
+
+    # レスポンスの内容を取得してチャンネルだけを保存
+    for search_result in search_response.get("items", []):
+        if search_result["id"]["kind"] == "youtube#channel":
+            channels.append("%s (%s)" % (search_result["snippet"]["title"], search_result["id"]["channelId"]))
+
+    return channels
 
 if __name__ == "__main__":
 #    app.run()
