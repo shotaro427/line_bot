@@ -50,7 +50,7 @@ def handle_message(event):
     opt.max_results = 5
 
     send_text = "Channels:\n" + "\n".join(await youtube_search(opt)) + "\n"
-
+    print(send_text)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=send_text)
